@@ -1,0 +1,73 @@
+if(NOT DEFINED HARDWARE_DESC)
+	set(HARDWARE_DESC "regular")
+endif()
+
+file(GLOB SOURCES_CC "*.cc")
+file(GLOB SOURCES_C "*.c")
+add_library(rgbmatrix OBJECT ${SOURCES_C} ${SOURCES_CC})
+
+set_target_properties(rgbmatrix PROPERTIES POSITION_INDEPENDENT_CODE 1)
+target_include_directories(rgbmatrix BEFORE PRIVATE "${CMAKE_SOURCE_DIR}/include")
+set_target_properties(rgbmatrix PROPERTIES COMPILE_OPTIONS "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fno-exceptions;-Wno-unused-parameter>;$<$<COMPILE_LANG_AND_ID:C,GNU>:-Wno-unused-parameter>;${USER_DEFINES}")
+target_compile_definitions(rgbmatrix PUBLIC DEFAULT_HARDWARE="${HARDWARE_DESC}")
+
+if(DEFINED INVERSE_RGB_DISPLAY_COLORS)
+    target_compile_definitions(rgbmatrix PUBLIC INVERSE_RGB_DISPLAY_COLORS)
+endif()
+
+if(DEFINED SHOW_REFRESH_RATE)
+    target_compile_definitions(rgbmatrix PUBLIC SHOW_REFRESH_RATE)
+endif()
+
+if(DEFINED RGB_SCAN_INTERLACED)
+    if(RGB_SCAN_INTERLACED STREQUAL "1")
+        target_compile_definitions(rgbmatrix PUBLIC RGB_SCAN_INTERLACED=1)
+    else()
+        target_compile_definitions(rgbmatrix PUBLIC RGB_SCAN_INTERLACED=${RGB_SCAN_INTERLACED})
+    endif()
+endif()
+
+if(DEFINED RGB_SLOWDOWN_GPIO)
+    if(RGB_SLOWDOWN_GPIO STREQUAL "1")
+        target_compile_definitions(rgbmatrix PUBLIC RGB_SLOWDOWN_GPIO=1)
+    else()
+        target_compile_definitions(rgbmatrix PUBLIC RGB_SLOWDOWN_GPIO=${RGB_SLOWDOWN_GPIO})
+    endif()
+endif()
+
+if(DEFINED LSB_PWM_NANOSECONDS)
+    if(LSB_PWM_NANOSECONDS STREQUAL "130")
+        target_compile_definitions(rgbmatrix PUBLIC LSB_PWM_NANOSECONDS=130)
+    else()
+        target_compile_definitions(rgbmatrix PUBLIC LSB_PWM_NANOSECONDS=${LSB_PWM_NANOSECONDS})
+    endif()
+endif()
+
+if(DEFINED DISABLE_HARDWARE_PULSES)
+    target_compile_definitions(rgbmatrix PUBLIC DISABLE_HARDWARE_PULSES)
+endif()
+
+if(DEFINED REMOVE_DEPRECATED_TRANSFORMERS)
+    target_compile_definitions(rgbmatrix PUBLIC REMOVE_DEPRECATED_TRANSFORMERS)
+endif()
+
+if(DEFINED FIXED_FRAME_MICROSECONDS)
+    if(FIXED_FRAME_MICROSECONDS STREQUAL "5000")
+        target_compile_definitions(rgbmatrix PUBLIC FIXED_FRAME_MICROSECONDS=5000)
+    else()
+        target_compile_definitions(rgbmatrix PUBLIC FIXED_FRAME_MICROSECONDS=${FIXED_FRAME_MICROSECONDS})
+    endif()
+endif()
+
+if(DEFINED ONLY_SINGLE_SUB_PANEL)
+    target_compile_definitions(rgbmatrix PUBLIC ONLY_SINGLE_SUB_PANEL)
+endif()
+
+add_library(rgbmatrix_shared SHARED $<TARGET_OBJECTS:rgbmatrix>)
+target_link_libraries(rgbmatrix_shared -lpthread -lrt -lm -lpthread)
+set_target_properties(rgbmatrix_shared PROPERTIES OUTPUT_NAME rgbmatrix)
+set_target_properties(rgbmatrix_shared PROPERTIES SOVERSION 1)
+
+add_library(rgbmatrix_static STATIC $<TARGET_OBJECTS:rgbmatrix>)
+target_link_libraries(rgbmatrix_static ${libs_objects})
+set_target_properties(rgbmatrix_static PROPERTIES OUTPUT_NAME rgbmatrix)

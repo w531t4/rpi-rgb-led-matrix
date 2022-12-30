@@ -1,0 +1,47 @@
+set(EXAMPLES_LINK_LIBS  "rgbmatrix_static" "-lrt" "-lm" "-lpthread")
+set(EXAMPLES_COMPILE_OPTIONS "-Wno-unused-parameter")
+
+add_executable(demo demo-main.cc)
+set_target_properties(demo PROPERTIES COMPILE_OPTIONS "${EXAMPLES_COMPILE_OPTIONS}")
+target_include_directories(demo BEFORE PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_link_libraries(demo "${EXAMPLES_LINK_LIBS}")
+
+add_executable(minimal_example minimal-example.cc)
+set_target_properties(minimal_example PROPERTIES COMPILE_OPTIONS "${EXAMPLES_COMPILE_OPTIONS}")
+target_include_directories(minimal_example BEFORE PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_link_libraries(minimal_example "${EXAMPLES_LINK_LIBS}")
+set_target_properties(minimal_example PROPERTIES OUTPUT_NAME "minimal-example")
+
+add_executable(c_example c-example.c)
+set_target_properties(c_example PROPERTIES COMPILE_OPTIONS "${EXAMPLES_COMPILE_OPTIONS}")
+target_include_directories(c_example BEFORE PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_link_libraries(c_example "${EXAMPLES_LINK_LIBS}" -lstdc++)
+set_target_properties(c_example PROPERTIES OUTPUT_NAME "c-example")
+
+add_executable(text_example text-example.cc)
+set_target_properties(text_example PROPERTIES COMPILE_OPTIONS "${EXAMPLES_COMPILE_OPTIONS}")
+target_include_directories(text_example BEFORE PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_link_libraries(text_example "${EXAMPLES_LINK_LIBS}")
+set_target_properties(text_example PROPERTIES OUTPUT_NAME "text-example")
+
+add_executable(scrolling_text_example scrolling-text-example.cc)
+set_target_properties(scrolling_text_example PROPERTIES COMPILE_OPTIONS "${EXAMPLES_COMPILE_OPTIONS}")
+target_include_directories(scrolling_text_example BEFORE PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_link_libraries(scrolling_text_example "${EXAMPLES_LINK_LIBS}")
+set_target_properties(scrolling_text_example PROPERTIES OUTPUT_NAME "scrolling-text-example")
+
+add_executable(clock clock.cc)
+set_target_properties(clock PROPERTIES COMPILE_OPTIONS "${EXAMPLES_COMPILE_OPTIONS}")
+target_include_directories(clock BEFORE PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_link_libraries(clock "${EXAMPLES_LINK_LIBS}")
+
+add_executable(ledcat ledcat.cc)
+set_target_properties(ledcat PROPERTIES COMPILE_OPTIONS "${EXAMPLES_COMPILE_OPTIONS}")
+target_include_directories(ledcat BEFORE PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_link_libraries(ledcat "${EXAMPLES_LINK_LIBS}")
+
+add_executable(input_example input-example.cc)
+set_target_properties(input_example PROPERTIES COMPILE_OPTIONS "${EXAMPLES_COMPILE_OPTIONS}")
+target_include_directories(input_example BEFORE PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_link_libraries(input_example "${EXAMPLES_LINK_LIBS}")
+set_target_properties(input_example PROPERTIES OUTPUT_NAME "input-example")
