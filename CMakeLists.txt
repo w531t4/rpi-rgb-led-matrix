@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.7.2)
+cmake_minimum_required(VERSION 3.23)
+# use of target_sources() w/ FILE_SET's requires 3.23
+
 set (CMAKE_CXX_STANDARD 11)
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
