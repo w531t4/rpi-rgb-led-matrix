@@ -4,10 +4,13 @@ endif()
 
 file(GLOB SOURCES_CC "*.cc")
 file(GLOB SOURCES_C "*.c")
+set(PUB_HEADERS_DIR "${CMAKE_SOURCE_DIR}/include")
+file(GLOB PUB_HEADER_FILES "${PUB_HEADERS_DIR}/*.h")
 add_library(rgbmatrix OBJECT ${SOURCES_C} ${SOURCES_CC})
 
 set_target_properties(rgbmatrix PROPERTIES POSITION_INDEPENDENT_CODE 1)
-target_include_directories(rgbmatrix BEFORE PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_sources(rgbmatrix PUBLIC FILE_SET HEADERS BASE_DIRS "${PUB_HEADERS_DIR}")
+target_sources(rgbmatrix PUBLIC FILE_SET HEADERS FILES ${PUB_HEADER_FILES})
 set_target_properties(rgbmatrix PROPERTIES COMPILE_OPTIONS "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fno-exceptions;-Wno-unused-parameter>;$<$<COMPILE_LANG_AND_ID:C,GNU>:-Wno-unused-parameter>;${USER_DEFINES}")
 target_compile_definitions(rgbmatrix PUBLIC DEFAULT_HARDWARE="${HARDWARE_DESC}")
 
@@ -67,7 +70,11 @@ add_library(rgbmatrix_shared SHARED $<TARGET_OBJECTS:rgbmatrix>)
 target_link_libraries(rgbmatrix_shared -lpthread -lrt -lm -lpthread)
 set_target_properties(rgbmatrix_shared PROPERTIES OUTPUT_NAME rgbmatrix)
 set_target_properties(rgbmatrix_shared PROPERTIES SOVERSION 1)
+install(TARGETS rgbmatrix_shared)
 
 add_library(rgbmatrix_static STATIC $<TARGET_OBJECTS:rgbmatrix>)
 target_link_libraries(rgbmatrix_static ${libs_objects})
 set_target_properties(rgbmatrix_static PROPERTIES OUTPUT_NAME rgbmatrix)
+install(TARGETS rgbmatrix_static)
+
+install(TARGETS rgbmatrix FILE_SET HEADERS)
